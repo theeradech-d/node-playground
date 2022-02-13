@@ -1,0 +1,85 @@
+<section>
+    <section>
+        <p>2. Split File</p>
+        <p>Load Javascript file</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+        //config.js
+        let mySomeObject = {
+            name : "my-app-name",
+            port : 3000
+        }
+        module.exports = mySomeObject
+    </code></pre>
+
+        <pre><code class="language-js" data-trim data-line-numbers>
+        //index.js
+        const config = require('./config')
+        console.log(config)
+    </code></pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+        node index.js
+    </code>
+    </pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+        { name: 'my-app-name', port: 3000 }
+    </code>
+    </pre>
+    </section>
+
+    <section>
+        <p>Load Javascript file</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+        //helper.js
+        exports.helloWolrd = (name)=>{
+            return `Hello ${name}`
+        }
+        
+        exports.sayHi = (name)=>{
+            return `Hi ${name}`
+        }
+    </code></pre>
+
+        <pre><code class="language-js" data-trim data-line-numbers>
+        //index.js
+        const helper = require('./helper')
+        console.log(helper.helloWolrd("world"))
+        console.log(helper.sayHi("world"))
+    </code></pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+        node index.js
+    </code>
+    </pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+        Hello world
+        Hi world
+    </code>
+    </pre>
+    </section>
+    
+    <section>
+        <p>Load Json file</p>
+        <pre><code class="language-json" data-trim data-line-numbers>
+        //config.json
+        {
+            "name" : "my-app-name",
+            "port" : 3000
+        }
+    </code></pre>
+
+        <pre><code class="language-js" data-trim data-line-numbers>
+        //index.js
+        const config = require('./config.json')
+        console.log(config)
+    </code></pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+        node index.js
+    </code>
+    </pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+        { name: 'my-app-name', port: 3000 }
+    </code>
+    </pre>
+    </section>
+
+    
+</section>

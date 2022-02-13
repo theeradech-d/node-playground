@@ -1,0 +1,46 @@
+<section>
+<section>
+    <h2>1. Create First Project</h2>
+    <pre><code class="language-shell" data-trim>
+        mkdir my-node-project
+    </code></pre>
+    <pre><code class="language-shell" data-trim>
+        cd my-node-project
+    </code></pre>
+    <pre><code class="language-shell" data-trim>
+        npm init
+    </code></pre>
+    <pre><code class="language-shell" data-trim >
+        npm install --save express
+    </code></pre>
+</section>
+
+<section>
+    <p>index.js</p>
+    <pre><code class="language-js" data-trim data-line-numbers>
+        // Import Library
+        const express = require('express')
+
+        // Create Express
+        const app = express()
+
+        // Declare Port
+        const port = 3000
+
+        // Create route (http://localhost:3000/)
+        app.get('/', (req, res) => {
+            res.send('Hello World!')
+        })
+
+        // Start server on port 3000
+        app.listen(port, () => {
+            console.log(`Example app listening on http://localhost:${port}`)
+        })
+    </code></pre>
+    <pre><code class="language-shell" data-trim data-line-numbers>
+        node index.js
+    </code>
+    </pre>
+    <a href="http://localhost:3000">http://localhost:3000</a>
+</section>
+</section>

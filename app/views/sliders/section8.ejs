@@ -1,0 +1,33 @@
+<section>
+    <section>
+        <p>Route params</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            app.get('/users/:userId', function (req, res) {
+                res.send(req.params)
+            })
+        </code></pre>
+
+        <p>Response</p>
+        <pre><code class="language-json" data-trim data-line-numbers>
+            {
+                "userId": "1000"
+            }
+        </code></pre>
+    </section>
+
+    <section>
+        <p>Route Json</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            app.use(express.json());  // for parsing application/json
+            app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+            app.post('/users/:userId', function (req, res) {
+                res.send(req.body)
+            })
+        </code></pre>
+        <img src="/images/3-route/json_post.png">
+    </section>
+
+   
+
+</section>

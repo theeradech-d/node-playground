@@ -1,0 +1,68 @@
+<section>
+    <section>
+        <p>4. Route and split file</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //index.js
+            const express = require('express')
+            const route = require('./route')
+            const app = express()
+            app.use(express.json());  // for parsing application/json
+            app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+            const port = 3000
+
+            app.use(route)
+
+            // Start server on port 3000
+            app.listen(port, () => {
+                console.log(`Example app listening on http://localhost:${port}`)
+            })
+        </code></pre>
+    </section>
+
+    <section>
+        <p>Route</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //route.js
+            const express = require('express')
+            const router = express.Router()
+
+            const userController = require('./controllers/user-controller')
+
+            // GET method route
+            router.get('/users', userController.index)
+            router.post('/users/:userId', userController.detail)
+
+            module.exports = router
+        </code></pre>
+    </section>
+
+    <section>
+        <p>Controller</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //controllers/user-controller.js
+            exports.index = function (req, res) {
+                res.json([
+                    {
+                        id: 1,
+                        name: "user1",
+                    },
+                    {
+                        id: 2,
+                        name: "user2",
+                    }
+                ])
+            }
+            
+            exports.detail = function (req, res) {
+                let user = {
+                    id: req.params.userId,
+                    name: "my name",
+                }
+                res.json(user)
+            }
+        </code></pre>
+    </section>
+
+   
+
+</section>

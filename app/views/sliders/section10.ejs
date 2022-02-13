@@ -1,0 +1,157 @@
+<section>
+    <section>
+        <p>5. CallBack, Promise, Async Await</p>
+    </section>
+    <section>
+        <p>CallBack</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            function getUsers(callback){
+                $.ajax({
+                    url: "https://localhost/users",
+                }).done(function(result) {
+                    callback(null, result)
+                }).fail(function(error) {
+                    callback(error)
+                })
+            }
+        </code></pre>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            getUsers(function(err, result){
+                if(err) return alert("error")
+                console.log(result)
+            })
+        </code></pre>
+    </section>
+    <section>
+        <p>CallBack Hell</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            getUsers(function(err, user){
+                if(err) return alert("error")
+                getRoles(user, function(err, roles){
+                    if(err) return alert("error")
+                    getUserProducts(roles, function(err, products){
+                        if(err) return alert("error")
+                        console.log(products)
+                    })
+                })
+            })
+        </code></pre>
+    </section>
+    <section>
+        <p>Promise</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            function getUsers(callback){
+                return new Promise(function(resolve, reject){
+                    $.ajax({
+                        url: "https://localhost/users",
+                    }).done(function(result) {
+                        resolve(result)
+                    }).fail(function(error) {
+                        reject(error)
+                    })
+                })
+            }
+        </code></pre>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            getUsers()
+            .then(function(result){
+                console.log(result)
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        </code></pre>
+    </section>
+    <section>
+        <p>Promise chaining</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            getUsers()
+            .then(function(user){
+                return getRoles(user)
+            })
+            .then(function(role){
+                return getUserProducts(role)
+            })
+            .then(function(products){
+                return products
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        </code></pre>
+    </section>
+    <section>
+        <p>Promise all</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            let usersPromise = getUsers()
+            let rolesPromise = getRoles()
+            let productsPromise = getProducts()
+
+            
+            Promise.all([usersPromise, rolesPromise, productsPromise])
+            .then(function(result){
+                let users = result[0]
+                let roles = result[1]
+                let products = result[2]
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        </code></pre>
+    </section>
+    <section>
+        <p>Async Await</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            getUsers()
+            .then(function(user){
+                return getRoles(user)
+            })
+            .then(function(role){
+                return getUserProducts(role)
+            })
+            .then(function(products){
+                return products
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        </code></pre>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            async function loadData(){
+                let user = await getUsers()
+                let roles = await getRoles(user)
+                let products = await getUserProducts(roles)
+                console.log(products)
+            } 
+            loadData()
+        </code></pre>
+    </section>
+    <section>
+        <p>Async Await</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            getUsers()
+            .then(function(user){
+                return getRoles(user)
+            })
+            .then(function(role){
+                return getUserProducts(role)
+            })
+            .then(function(products){
+                return products
+            })
+            .catch(function(error){
+                console.log(error)
+            })
+        </code></pre>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            async function loadData(){
+                let user = await getUsers()
+                let roles = await getRoles(user)
+                let products = await getUserProducts(roles)
+                console.log(products)
+            } 
+            loadData()
+        </code></pre>
+    </section>
+
+</section>
