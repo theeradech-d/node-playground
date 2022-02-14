@@ -2,23 +2,22 @@ const db = require('./db')
 
 async function init(){
     try {
-        let res = await  db.schema.createTable('users', function (table) {
+        await  db.schema.dropTableIfExists('users')
+
+        await  db.schema.createTable('users', function (table) {
             table.increments();
-            table.string('name');
+            table.string('username');
+            table.string('password');
             table.timestamps();
         })
         
         await db('users').insert({
-            name: "user 1",
+            username: "user1",
+            password: "123456",
         })
         await db('users').insert({
-            name: "user 2",
-        })
-        await db('users').insert({
-            name: "user 3",
-        })
-        await db('users').insert({
-            name: "user 4",
+            username: "user2",
+            password: "123456",
         })
 
     } catch (error) {
