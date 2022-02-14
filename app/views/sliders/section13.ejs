@@ -1,0 +1,126 @@
+<section>
+    <section>
+        <h2>8. Middleware</h2>
+    </section>
+    
+    <section>
+        <h2>Log Middleware</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            var myLogger  = function (req, res, next) {
+                console.log('LOGGED')
+                next()
+            }
+            
+            app.use(myLogger)
+
+            app.get('/', function (req, res) {
+                res.send('Hello World!')
+            })
+        </code></pre>
+    </section>
+    
+    <section>
+        <h2>Auth Middleware</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            var AuthMiddleware  = async function (req, res, next) {
+                if(isTokenValid){
+                    req.user = await User.find({token})
+                    return next()
+                }
+                res.status(400).json({
+                    message : "has error"
+                })
+            }
+
+            app.get('/', AuthMiddleware, function (req, res) {
+                console.log(req.user)
+                res.send('Hello World!')
+            })
+        </code></pre>
+    </section>
+    
+    <section>
+        <h2>Auth Middleware With JWT</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //middewares/auth-middleware.json
+            const jwt = require('jsonwebtoken');
+            const config = require('../config');
+            const Users = require('../models/user-model');
+
+            async function AuthMiddleware(req, res, next) {
+                let authorization = req.headers.authorization
+                let token = authorization.replace("Bearer ", "")
+
+                try {
+                    var decoded = jwt.verify(token, config.secret);
+                    let userId = decoded.userId
+                    let user = await Users.findOne({ _id: userId })
+                    req.user = user;
+                    next();
+                } catch (error) {
+                    res.status(400).json({
+                        message : error.message
+                    })
+                }
+            }
+
+            module.exports = AuthMiddleware
+        </code></pre>
+    </section>
+    
+    <section>
+        <h2>Auth Middleware With JWT</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //route.js
+            const AuthMiddleware = require('./middewares/auth-middleware')
+
+            router.get('/users', AuthMiddleware, userController.index)
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="/images/8-middleware/middleware_auth_2.png" alt="">
+        <img src="/images/8-middleware/middleware_auth.png" alt="">
+    </section>
+
+    <section>
+        <h2>Login create JWT Token</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //controllers/auth-controller.js
+            const jwt = require('jsonwebtoken');
+            const config = require('../config')
+            const Users = require('../models/user-model')
+
+            exports.login = async function (req, res) {
+                let username = req.body.username
+                let password = req.body.password
+                try {
+                    let user = await Users.findOne({ username, password })
+                    if (!user) {
+                        throw new Error("ไม่พบผู้ใช้งาน")
+                    }
+                    var token = jwt.sign({
+                        userId: user._id
+                    }, config.secret, { expiresIn: '1h' });
+                    res.json({
+                        token
+                    })
+                } catch (error) {
+                    res.status(400).json({
+                        message : error.message
+                    })
+                }
+            }
+        </code></pre>
+    </section>
+    <section>
+        <h2>Login create JWT Token</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //route.js
+            const authController = require('./controllers/auth-controller')
+            router.post('/login', authController.login)
+        </code></pre>
+        <img src="/images/8-middleware/auth_login.png">
+    </section>
+
+</section>

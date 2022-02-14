@@ -1,0 +1,86 @@
+<section>
+    <section>
+        <h2>9. Template Engine</h2>
+    </section>
+    
+    <section>
+        <h2>Popular template</h2>
+
+        <a target="_blank" href="https://pugjs.org/api/getting-started.html">Pug</a>, 
+        <a target="_blank" href="https://www.npmjs.com/package/mustache">Mustache</a>, 
+        <a target="_blank" href="https://www.npmjs.com/package/ejs">EJS</a>
+
+        <pre><code class="language-shell" data-trim>
+            npm install pug --save
+        </code></pre>
+        <pre><code class="language-shell" data-trim>
+            npm install mustache --save
+        </code></pre>
+        <pre><code class="language-shell" data-trim>
+            npm install ejs --save
+        </code></pre>
+
+    </section>
+
+    <section>
+        <h2>EJS</h2>
+
+        <pre><code class="language-shell" data-trim>
+            npm install ejs --save
+        </code></pre>
+
+        <p>กำหนด template engine เป็น ejs</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            app.set('view engine', 'ejs');
+        </code></pre>
+
+        <p>กำหนด static path เอาไว้โหลดไฟล์ js, image, css</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            app.use(express.static(path.join(__dirname, 'public')));
+        </code></pre>
+        <small><u>http://localhost:3000/app.js</u> ตำแหน่งไฟล์คือ /public/app.js</small>
+        <small><u>http://localhost:3000/app.css</u> ตำแหน่งไฟล์คือ /public/app.css</small>
+        
+
+    </section>
+
+    <section>
+        <h2>Render Template</h2>
+        <pre><code class="language-js" data-trim>
+            //controllers/home-controller.js
+            exports.index = function (req, res) {
+                let data = {}
+            
+                data.pageTitle = "Home Page"
+                data.detail = "<p><strong>Hello</strong> World</p>"
+                data.menus = [
+                    {
+                        name: "Home",
+                        url: "/",
+                    },
+                    {
+                        name: "Login",
+                        url: "/login",
+                    }
+                ]
+            
+                res.render("home", data) //views/home.ejs
+            }
+        </code></pre>
+    </section>
+
+    
+    <section>
+        <h2>EJS File</h2>
+        
+        <p>/views/home.ejs</p>
+        <img src="/images/9-template-engine/ejs_home.png">
+    </section>
+
+    <section>
+        <h2>Render Template</h2>
+        <img src="/images/9-template-engine/render_template.png">
+    </section>
+    
+
+</section>
