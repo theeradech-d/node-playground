@@ -126,29 +126,19 @@
             loadData()
         </code></pre>
     </section>
+
     <section>
-        <p>Async Await</p>
-        <pre><code class="language-js" data-trim data-line-numbers>
-            getUsers()
-            .then(function(user){
-                return getRoles(user)
-            })
-            .then(function(role){
-                return getUserProducts(role)
-            })
-            .then(function(products){
-                return products
-            })
-            .catch(function(error){
-                console.log(error)
-            })
-        </code></pre>
+        <p>Try/Catch</p>
         <pre><code class="language-js" data-trim data-line-numbers>
             async function loadData(){
-                let user = await getUsers()
-                let roles = await getRoles(user)
-                let products = await getUserProducts(roles)
-                console.log(products)
+                try {
+                    let user = await getUsers()
+                    let roles = await getRoles(user)
+                    let products = await getUserProducts(roles)
+                    console.log(products)
+                } catch(error) {
+                    console.log(error)
+                }
             } 
             loadData()
         </code></pre>
