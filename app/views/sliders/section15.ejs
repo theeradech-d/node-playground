@@ -1,0 +1,64 @@
+<section>
+    <section>
+        <h2>10. Real-Time With Socket.IO</h2>
+    </section>
+    
+    <section>
+        <h2>Socket.IO</h2>
+        <pre><code class="language-shell" data-trim>
+            npm install socket.io --save
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Server Side</h2>
+        <pre><code class="language-js" data-trim>
+            const express = require('express')
+            const http = require('http');
+            const app = express()
+            const { Server } = require("socket.io");
+            
+            const server = http.createServer(app);
+            const io = new Server(server);
+
+            io.on('connection', (socket) => {
+                console.log('a user connected');
+    
+                // Event on client
+                socket.on('sendMessage', (data) => {
+                    console.log(data)
+                });
+    
+                // Client is Disconnect
+                socket.on('disconnect', () => {
+                    console.log("disconnect")
+                });
+
+            });
+
+            app.get('/', function (req, res) {
+                res.send('GET request to the homepage')
+            })
+
+            server.listen(port, () => {
+                console.log(`Example app listening on http://localhost:${port}`)
+            })
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Client Side</h2>
+        <pre><code class="language-html" data-trim>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js"></script>
+            <script>
+                var socket = io("http://localhost:3000");
+
+                function sendMessage(data){
+                    socket.emit("sendMessage", data)
+                }
+            </script>
+        </code></pre>
+    </section>
+
+
+</section>
