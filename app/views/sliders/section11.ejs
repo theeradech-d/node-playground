@@ -1,0 +1,128 @@
+<section>
+    <section>
+        <h2>6. Database</h2>
+    </section>
+    <section>
+        <h2>Query Builder</h2>
+        <p>Knex.js</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            let user = await knex
+            .select('firstName', 'lastName')
+            .where("id", 1)
+            .from('users')
+
+            console.log(user)
+        </code></pre>
+    </section>
+    <section>
+        <h2>ORM</h2>
+        <p>Sequelize</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            const { Sequelize, DataTypes } = require('sequelize');
+            const sequelize = new Sequelize('sqlite::memory:');
+
+            const User = sequelize.define('User', {
+                firstName: {
+                    type: DataTypes.STRING,
+                },
+                lastName: {
+                    type: DataTypes.STRING
+                }
+            });
+
+            let user = await User.findOne({ where: { id: 1 } });
+
+            console.log(user)
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Connect to Database</h2>
+        <p>with <a href="https://knexjs.org/" target="_blank">knexjs</a></p>
+        
+        <pre><code class="language-shell" data-trim data-line-numbers>
+            npm install --save knex
+        </code></pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+            npm install --save sqlite3
+        </code></pre>
+        <pre><code class="language-shell" data-trim data-line-numbers>
+            npm install --save mysql
+        </code></pre>
+        
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //db.js
+            const knex = require('knex')({
+                client: 'better-sqlite3', // connect to sqlite
+                connection: {
+                    filename: "./mydb.sqlite"
+                },
+                useNullAsDefault: true
+            });
+            
+            module.exports = knex
+        </code></pre>
+    </section>
+
+    <section>
+        <p>โหลดไฟล์ db ที่ index.js เพื่อเริ่ม connect กับ database</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //index.js
+            const db = require('./db')
+        </code></pre>
+        <p>โหลดไฟล์ db ที่ controller เพื่อ query ข้อมูล</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //controllers/user-controller.js
+            const db = require('./db')
+
+            exports.index = async function (req, res) {
+                let users = await db('users').select("*")
+                res.json(users)
+            }
+        </code></pre>
+        <p>Route</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //route.js
+            const userController = require('./controllers/user-controller')
+            router.get('/users', userController.index)
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="/images/6-database/get_users.png">
+    </section>
+
+    <section>
+        CRUD
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //controllers/user-controller.js
+            const db = require('../db')
+
+            exports.index = async function (req, res) {
+                let users = await db('users').select("*")
+                res.json(users)
+            }
+
+            exports.detail = async function (req, res) {
+                let user = await db('users').select("*").where("id", req.params.userId).first()
+                res.json(user)
+            }
+            
+            exports.update = async function (req, res) {
+                let user = await db('users').where("id", req.params.userId).update(req.body)
+                res.json(true)
+            }
+            
+            exports.create = async function (req, res) {
+                let userId = await db('users').insert(req.body)
+                res.json(userId)
+            }
+            
+            exports.delete = async function (req, res) {
+                let result = await db('users').where("id", req.params.userId).delete()
+                res.json(true)
+            }
+        </code></pre>
+    </section>
+    
+</section>

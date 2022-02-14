@@ -1,0 +1,105 @@
+<section>
+    <section>
+        <h2>7. MongoDB</h2>
+    </section>
+    
+    <section>
+        <h2>Connect to Database</h2>
+        <p>with <a href="https://mongoosejs.com/" target="_blank">mongoosejs</a></p>
+        
+        <pre><code class="language-shell" data-trim data-line-numbers>
+            npm install --save mongoose
+        </code></pre>
+        
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //mongodb.js
+            const mongoose = require('mongoose');
+            mongoose.connect('mongodb+srv://[username]:[password]@[host]/[database]?retryWrites=true&w=majority', {
+                serverSelectionTimeoutMS: 5000
+            }).catch(err => console.log(err.reason));
+
+            module.exports = mongoose
+        </code></pre>
+    </section>
+
+    <section>
+        <p>โหลดไฟล์ mongodb.js ที่ index.js เพื่อเริ่ม connect กับ database</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //index.js
+            const mongodb = require('./mongodb')
+        </code></pre>
+    </section>
+
+    <section>
+        <p>สร้างไฟล์ User Model</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //models/user-model.js
+            const mongodb = require("../mongodb");
+            const { Schema } = mongodb;
+
+            const schema = new Schema({
+                username: String,
+                password: String,
+            }, {
+                timestamps: {
+                    createdAt: 'created_at',
+                    updatedAt: 'updated_at'
+                }
+            });
+
+            const Users = mongodb.model('users', schema);
+
+            module.exports = Users
+        </code></pre>
+    </section>
+    <section>
+        <p>โหลดไฟล์ User model ที่ controller เพื่อ query ข้อมูล</p>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //controllers/user-controller.js
+            const Users = require('../models/user-model')
+
+            exports.index = async function (req, res) {
+                let users = await Users.find()
+                res.json(users)
+            }
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="/images/7-mongodb/get_users_mongo.png">
+    </section>
+
+    <section>
+        CRUD
+        <pre><code class="language-js" data-trim data-line-numbers>
+            //controllers/user-controller.js
+            const Users = require('../models/user-model')
+
+            exports.index = async function (req, res) {
+                let users = await Users.find()
+                res.json(users)
+            }
+
+            exports.detail = async function (req, res) {
+                let user = await Users.findOne({id: req.params.userId})
+                res.json(user)
+            }
+
+            exports.update = async function (req, res) {
+                let user = await Users.findOneAndUpdate({id: req.params.userId}, req.body)
+                res.json(true)
+            }
+
+            exports.create = async function (req, res) {
+                let user = await Users.create(req.body)
+                res.json(user)
+            }
+
+            exports.delete = async function (req, res) {
+                let user = await Users.deleteOne({id: req.params.userId})
+                res.json(true)
+            }
+        </code></pre>
+    </section>
+    
+</section>
