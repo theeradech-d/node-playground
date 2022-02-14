@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+
+    <% menus.forEach(menu=> { %>
+    <a href="<%= menu.url %>">
+        <%= menu.name %>
+    </a>
+    <% }); %>
+
+    <h1>
+        <%= pageTitle %>
+    </h1>
+
+    <form id="login_form">
+
+        <div>
+            <label for="username">
+                Username
+            </label>
+            <strong  id="username"></strong>
+        </div>
+        <div>
+            <label for="password">
+                Password
+            </label>
+            <strong id="password"></strong>
+        </div>
+
+        <button type="button" onclick="logout()">Logout</button>
+
+    </form>
+
+
+    <h1>CHAT</h1>
+    <form id="chat_form">
+        <div class="messages">
+
+        </div>
+        <input type="text" id="message" name="message">
+        <button type="submit">Send</button>
+    </form>
+
+    <h1>ONLINE USER (<span class="count_online_user"></span>)</h1>
+    <ol class="online_users"></ol>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.js" integrity="sha512-MgkNs0gNdrnOM7k+0L+wgiRc5aLgl74sJQKbIWegVIMvVGPc1+gc1L2oK9Wf/D9pq58eqIJAxOonYPVE5UwUFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        
+        function logout(){
+            localStorage.removeItem("token")
+            window.location = "/login"
+        }
+
+        $(function(){
+            let token = localStorage.getItem("token")
+            if(token){
+                $.ajax({
+                    url: "/profile",
+                    method: "get",
+                    headers:{
+                        authorization: token
+                    }
+                })
+                .done(function(result){
+                    $("#username").text(result.username)
+                    $("#password").text(result.password)
+                })
+                .fail(function(error){
+                    alert(error.responseJSON.message)
+                })
+
+                var socket = io("http://localhost:3000", {
+                    auth: {
+                        token: token
+                    },
+                });
+
+                socket.on("message", function(data){
+                    console.log("message", data)
+
+                    $(".messages").append("<div><b>"+data.username+"</b>: "+data.message+"</div>")
+                })
+
+                socket.on("onlineUser", function(data){
+                    $(".count_online_user").text(Object.keys(data).length)
+                    $(".online_users").html("")
+                    Object.keys(data).forEach(function(_id){
+                        var user = data[_id]
+                        $(".online_users").append("<li>" + user.username + "</li>")
+                    })
+                })
+
+                $("#chat_form").submit(function(e){
+                    e.preventDefault()
+                    socket.emit("sendMessage", {
+                        message: $("#message").val()
+                    })
+                    $("#message").val("")
+                })
+
+            }else{
+                alert("ยังไม่ได้ Login")
+                window.location = "/login"
+            }
+        })
+    </script>
+</body>
+
+</html>
