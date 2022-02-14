@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+
+<body>
+
+    <% menus.forEach(menu=> { %>
+    <a href="<%= menu.url %>">
+        <%= menu.name %>
+    </a>
+    <% }); %>
+
+    <h1>
+        <%= pageTitle %>
+    </h1>
+
+    <form id="login_form">
+
+        <div>
+            <label for="username">
+                Username
+            </label>
+            <strong  id="username"></strong>
+        </div>
+        <div>
+            <label for="password">
+                Password
+            </label>
+            <strong id="password"></strong>
+        </div>
+
+        <button type="button" onclick="logout()">Logout</button>
+
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+        function logout(){
+            localStorage.removeItem("token")
+            window.location = "/login"
+        }
+
+        $(function(){
+            let token = localStorage.getItem("token")
+            if(token){
+                $.ajax({
+                    url: "/profile",
+                    method: "get",
+                    headers:{
+                        authorization: token
+                    }
+                })
+                .done(function(result){
+                    $("#username").text(result.username)
+                    $("#password").text(result.password)
+                })
+                .fail(function(error){
+                    alert(error.responseJSON.message)
+                })
+            }else{
+                alert("ยังไม่ได้ Login")
+                window.location = "/login"
+            }
+        })
+    </script>
+</body>
+
+</html>
