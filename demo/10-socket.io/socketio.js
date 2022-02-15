@@ -3,8 +3,8 @@ const { Server } = require("socket.io");
 const config = require('./config');
 const Users = require('./models/user-model');
 
-let io
-let onlineUser = {}
+var io
+var onlineUser = {}
 
 module.exports = {
     createSocketIo(server) {
@@ -23,6 +23,9 @@ module.exports = {
                 let user = await Users.findOne({ _id: userId })
 
                 socket.user = user;
+
+                //join room
+                socket.join(userId)
                 
                 next();
             } catch (error) {
@@ -56,5 +59,7 @@ module.exports = {
 
         return io
     },
-    io
+    io:function(){
+        return io
+    }
 }

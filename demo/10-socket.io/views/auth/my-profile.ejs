@@ -23,6 +23,12 @@
     <form id="login_form">
 
         <div>
+            <label for="_id">
+                _id
+            </label>
+            <strong  id="_id"></strong>
+        </div>
+        <div>
             <label for="username">
                 Username
             </label>
@@ -73,6 +79,7 @@
                     }
                 })
                 .done(function(result){
+                    $("#_id").text(result._id)
                     $("#username").text(result.username)
                     $("#password").text(result.password)
                 })

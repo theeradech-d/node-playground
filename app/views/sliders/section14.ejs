@@ -45,6 +45,28 @@
     </section>
 
     <section>
+        <h2>index.js</h2>
+        <pre><code class="language-js" data-trim data-line-numbers>
+            const express = require('express')
+            const app = express()
+            const route = require('./route')
+            
+            // Static file image, js, css
+            app.use(express.static(path.join(__dirname, 'public')));
+
+            // Template Engine using ejs
+            app.set('view engine', 'ejs');
+
+            const port = 3000
+            app.use(route)
+            app.listen(port, () => {
+                console.log(`Example app listening on http://localhost:${port}`)
+            })
+        </code></pre>
+        
+    </section>
+
+    <section>
         <h2>Render Template</h2>
         <pre><code class="language-js" data-trim>
             //controllers/home-controller.js
