@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --watch app --watch demo index.js"
+    "watch": "nodemon --watch app --watch demo index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "ejs": "^3.1.6",

@@ -1,0 +1,69 @@
+<section>
+    <section>
+        <h2>11. Use PM2 start service</h2>
+    </section>
+    
+    <section>
+        <h2>PM2</h2>
+        <pre><code class="language-shell" data-trim>
+            npm install pm2@latest -g
+        </code></pre>
+        <h2>Start</h2>
+        <pre><code class="language-shell" data-trim>
+            pm2 start index.js --name MyServiceName
+        </code></pre>
+    </section>
+    
+    <section>
+        <h2>Ecosystem File</h2>
+        <pre><code class="language-js" data-trim>
+            //ecosystem.config.js
+            module.exports = {
+                apps : [{
+                  name: "MyServiceName",
+                  script: "./index.js",
+                  env: {
+                    NODE_ENV: "production",
+                    PORT: 3000,
+                    DB_HOST: "localhost",
+                    DB_NAME: "MY_APP",
+                  },
+                }]
+            }
+        </code></pre>
+        <pre><code class="language-shell" data-trim>
+            # Start all applications
+            pm2 start ecosystem.config.js
+
+            # Stop all
+            pm2 stop ecosystem.config.js
+        </code></pre>
+    </section>
+    
+    <section>
+        <h2>ENV</h2>
+        <pre><code class="language-js" data-trim>
+            //ecosystem.config.js
+            module.exports = {
+                apps : [{
+                  name: "MyServiceName",
+                  script: "./index.js",
+                  env: {
+                    NODE_ENV: "production",
+                    PORT: 3000,
+                    DB_HOST: "localhost",
+                    DB_NAME: "MY_APP",
+                  },
+                }]
+            }
+        </code></pre>
+        <pre><code class="language-js" data-trim>
+            //index.js
+            console.log(process.env.NODE_ENV)
+            console.log(process.env.PORT)
+            console.log(process.env.DB_HOST)
+            console.log(process.env.DB_NAME)
+        </code></pre>
+    </section>
+
+</section>
